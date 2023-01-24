@@ -39,22 +39,20 @@ console.log(axios.isCancel('something')); */
 
 let latitude = 0;
 let longitude = 0;
-
 /* USER LOCATION */
 const successCallback = (position) => {
   latitude = position.coords.latitude;
   longitude = position.coords.longitude;
+  getWeather();
 }
 const errorCallback = (error) => {
   console.log('Error occured when getting the users geolocation: ' + error);
 }
 //HÄMTAR PLATS
 navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-//HÅLLER PLATS UPPDATERAD
-const id = navigator.geolocation.watchPosition(successCallback, errorCallback);
 
 //BACKGROUND IMAGE
-async function getData() {
+function getData() {
   let creator = document.querySelector('#creator')
   let imageElement = document.querySelector('#backgroundImage')
 
@@ -70,7 +68,7 @@ async function getData() {
     imageElement.src = 'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-1-scaled-1150x647.png',
     creator.innerText = 'Could not get a background, try reloading the page!')
 }
-await getData();
+getData();
 
 //WEATHER DATA
 
@@ -86,9 +84,10 @@ function displayWeather(data) {
   document.querySelector(".temp").innerText = temp + "°C";
   document.querySelector(".humidity").innerText = "Humidity: " + humidity + "%";
   document.querySelector(".wind").innerText = "Wind: " + speed + " m/s";
+  document.querySelector('.weatherData').style.visibility = 'visible';
 }
 
-async function getWeather() {
+function getWeather() {
   let apiKey = 'c5e1c01ad608f6a0ea9e64ee01591ec4'
 
   return axios
@@ -98,7 +97,6 @@ async function getWeather() {
     .catch((err) => console.log('Error occured when getting the weather data from the API: ' + err,
     document.querySelector('#city').innerText = 'Could not get weather data, try reloading the page!'))
 }
-await getWeather();
 
 
 //DISPLAY DATE
